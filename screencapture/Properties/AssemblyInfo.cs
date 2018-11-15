@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Eye Stream CApture")]
+[assembly: AssemblyProduct("Eye Stream Capture")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4465626f-84f0-496e-99ba-a3d93703f6ef")]
+[assembly: Guid("FF8BE73D-E9A5-40D9-9755-819C97523780")]
 
 // Version information for an assembly consists of the following four values:
 //

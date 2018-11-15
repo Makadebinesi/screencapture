@@ -30,6 +30,10 @@ namespace screencapture
             { 0, new Pen(Color.FromArgb(0, 0, 255), 5) }
         };
 
+        Font font;
+        Brush brush_Red;
+        Brush brush_Blue;
+
         private SQLiteCommand _SQLiteCommand;
         private SQLiteConnection _SQLiteConnetion;
 
@@ -40,10 +44,19 @@ namespace screencapture
         private int gazeMarkerSize;
         private double maxTimeFixation;
 
+        private int meditationPerc;
+        private int attentionPerc;
+
         #region Отрисовка маркера
         public void GazeMarking(string pathToFile, string pathToBD, string tableName)
         {
             this.tableName = tableName;
+
+            font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold);
+
+            brush_Red = new SolidBrush(Color.Red);
+            brush_Blue = new SolidBrush(Color.Blue);
+
             maxTimeFixation = Double.Parse(ConfigurationManager.AppSettings["Max_Time_Fixation"]);
             frameID = 1;
             gazeMarkerSize = Convert.ToInt32(ConfigurationManager.AppSettings["Size_Gaze_Marker"]);
@@ -75,6 +88,10 @@ namespace screencapture
             gazeX = Int32.Parse(_SQLiteCommand.ExecuteScalar().ToString());
             _SQLiteCommand.CommandText = "SELECT gazeY FROM " + tableName + " WHERE id=" + frameID;
             gazeY = Int32.Parse(_SQLiteCommand.ExecuteScalar().ToString());
+            _SQLiteCommand.CommandText = "SELECT meditation FROM " + tableName + " WHERE id=" + frameID;
+            meditationPerc = Int32.Parse(_SQLiteCommand.ExecuteScalar().ToString());
+            _SQLiteCommand.CommandText = "SELECT attention FROM " + tableName + " WHERE id=" + frameID;
+            attentionPerc = Int32.Parse(_SQLiteCommand.ExecuteScalar().ToString());
 
             frameID++;//для получения данных о следующем кадре
             int perc = (int)(TGF / maxTimeFixation) * 100;//процент от максимального времени фиксации взгляда, макс время устанавливает пользователь в настройках
@@ -86,7 +103,17 @@ namespace screencapture
                 {
                     if (perc >= i)
                     {
-                        g.DrawEllipse(pen[i], gazeX - (gazeMarkerSize / 2), gazeY - (gazeMarkerSize / 2), gazeMarkerSize, gazeMarkerSize);
+                        try
+                        {
+                            g.DrawEllipse(pen[i], gazeX - (gazeMarkerSize / 2), gazeY - (gazeMarkerSize / 2), gazeMarkerSize, gazeMarkerSize);
+                        }
+                        catch { }
+                        //g.DrawString("Расслабленость " + meditationPerc + " %", font, brush_Purple, 30, 50);
+                        //g.DrawString("Внимание " + attentionPerc + " %", font, brush_Orange, 30, 100);
+                        g.DrawRectangle(new Pen(brush_Red), 30, 700, 30, 300);
+                        g.DrawRectangle(new Pen(brush_Blue), 70, 700, 30, 300);
+                        g.FillRectangle(brush_Red, 30, 700 + (300 - attentionPerc * 3), 30, (attentionPerc * 3));
+                        g.FillRectangle(brush_Blue, 70, 700 + (300 - meditationPerc * 3), 30, (meditationPerc * 3));
                         break;
                     }
                 }

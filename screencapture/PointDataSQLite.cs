@@ -40,7 +40,7 @@ namespace screencapture
                 _SQLiteConnetion = new SQLiteConnection("Data Source=" + pathToDB);
                 _SQLiteConnetion.Open();
                 _SQLiteCommand.Connection = _SQLiteConnetion;
-                _SQLiteCommand.CommandText = "CREATE TABLE IF NOT EXISTS " + tableName + " (id INTEGER PRIMARY KEY AUTOINCREMENT, gazeX INTEGER, gazeY INTEGER, mouseX INTEGER, mouseY INTEGER, timeStamp DOUBLE, timeGazeFixed DOUBLE, cluster INTEGER)";
+                _SQLiteCommand.CommandText = "CREATE TABLE IF NOT EXISTS " + tableName + " (id INTEGER PRIMARY KEY AUTOINCREMENT, gazeX INTEGER, gazeY INTEGER, mouseX INTEGER, mouseY INTEGER, timeStamp DOUBLE, timeGazeFixed DOUBLE, cluster INTEGER, meditation INTEGER, attention INTEGER)";
                 _SQLiteCommand.ExecuteNonQuery();
 
             }
@@ -75,11 +75,11 @@ namespace screencapture
         /// <param name="mouseCursorX">Абсцисса положения курсора мыши</param>
         /// <param name="mouseCursorY">Ордината положения курсора мыши</param>
         /// <param name="timeCounter">Текущее время в сек, относительно начала записи</param>
-        public void WritingToDB(double GazeX, double GazeY, double mouseCursorX, double mouseCursorY, double timeCounter)
+        public void WritingToDB(double GazeX, double GazeY, double mouseCursorX, double mouseCursorY, double timeCounter, int meditationPerc, int attentionPerc)
         {
             Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-            _SQLiteCommand.CommandText = "INSERT INTO " + tableName + " ( gazeX, gazeY, mouseX, mouseY, timeStamp, timeGazeFixed, cluster ) "
-                        + "VALUES('" + (int)GazeX + "', '" + (int)GazeY + "', '" + (int)mouseCursorX + "', '" + (int)mouseCursorY + "', '" + timeCounter + "', '" + 0 + "', '" + 0 + "'); ";
+            _SQLiteCommand.CommandText = "INSERT INTO " + tableName + " ( gazeX, gazeY, mouseX, mouseY, timeStamp, timeGazeFixed, cluster, meditation, attention ) "
+                        + "VALUES('" + (int)GazeX + "', '" + (int)GazeY + "', '" + (int)mouseCursorX + "', '" + (int)mouseCursorY + "', '" + timeCounter + "', '" + 0 + "', '" + 0 + "', '" + meditationPerc + "', '" + attentionPerc + "'); ";
             _SQLiteCommand.ExecuteNonQuery();
         }
 

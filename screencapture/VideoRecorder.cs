@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using screencapture.Properties;
 using System.Configuration;
 using System.Threading.Tasks;
+using ThinkGearNET;
 
 namespace screencapture
 {
@@ -36,12 +37,15 @@ namespace screencapture
         string pathToDescription;
         string descriptionText;
 
-        double mouseX, mouseY, tempGazeX, tempGazeY, timer;        
+        double mouseX, mouseY, tempGazeX, tempGazeY, timer;
         int gazeMarkerSize;
 
         private System.Drawing.Size screenSize;
         Pen gazeMarkerpPen = new Pen(Color.FromArgb(0, 124, 173), 5);
         Image cursor = Resources.cursor_yellow;
+
+        ThinkGearWrapper thinkGear;
+
 
         /// <summary>
         /// Конструктор
@@ -50,6 +54,8 @@ namespace screencapture
         {
             eyeTracker = EyeTracker.GetEyeTracker();
             videoWriter = new VideoFileWriter();
+
+            thinkGear = new ThinkGearWrapper();
 
             //Получение границ экрана
             System.Drawing.Rectangle bounds = Screen.PrimaryScreen.Bounds;
@@ -72,6 +78,8 @@ namespace screencapture
         /// <param name="description">Текст описания исследования</param>
         public void StartRecording(string projectDirectory, string pathToFILE, string nameResearch, string description)
         {
+            thinkGear.Connect("COM4", ThinkGear.BAUD_57600, true);
+
             gazeMarkerSize = Convert.ToInt32(ConfigurationManager.AppSettings["Size_Gaze_Marker"]);
 
             string pathToVIDEO = pathToFILE + ".avi";
@@ -126,6 +134,8 @@ namespace screencapture
         /// </summary>        
         private void ProcessFrame(object source, System.Timers.ElapsedEventArgs e)
         {
+            thinkGear.UpdateState();
+
             tempGazeX = eyeTracker.gazeX;
             tempGazeY = eyeTracker.gazeY;
             mouseX = Cursor.Position.X;
@@ -140,14 +150,14 @@ namespace screencapture
                 //g.DrawEllipse(gazeMarkerpPen, (int)eyeTracker.tempGazeX - (gazeMarkerSize / 2), (int)eyeTracker.tempGazeY - (gazeMarkerSize / 2), gazeMarkerSize, gazeMarkerSize);
                 //g.DrawImage(cursor, (int)mouseX, (int)mouseY);
             }
-            
+
             if (isRecording && !writing)
             {
                 writing = true;
                 videoWriter.WriteVideoFrame(frameImage);
-                SQLite.WritingToDB(tempGazeX, tempGazeY, mouseX, mouseY, timer);//LogWriting - писать сначало в list, нужно раскоментить выше сериализацию и инициализацию List
+                SQLite.WritingToDB(tempGazeX, tempGazeY, mouseX, mouseY, timer, (int)thinkGear.ThinkGearState.Meditation, (int)thinkGear.ThinkGearState.Attention);//LogWriting - писать сначало в list, нужно раскоментить выше сериализацию и инициализацию List
                 writing = false;
-            }                                    
+            }
             frameImage.Dispose();
         }
 

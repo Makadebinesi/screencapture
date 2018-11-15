@@ -112,6 +112,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ThinkGearNET, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\ThinkGearNET.1.1.1\lib\ThinkGearNET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Tobii.EyeX.Client.Net20, Version=1.8.503.0, Culture=neutral, PublicKeyToken=70326046dcdce6cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Tobii.EyeX.Client.1.8.503\lib\net20\Tobii.EyeX.Client.Net20.dll</HintPath>
@@ -233,6 +237,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="ThinkGearNET_Extras\docs\NeuroSky_License_Agreement.pdf" />
+    <None Include="ThinkGearNET_Extras\samples.zip" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -269,6 +275,12 @@
     <EmbeddedResource Include="resources\cursor-yellow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ThinkGearNET_Extras\docs\copyright.txt" />
+    <Content Include="ThinkGearNET_Extras\docs\license.txt" />
+    <Content Include="ThinkGearNET_Extras\thinkgear.dll" />
+    <Content Include="ThinkGearNET_Extras\ThinkGearNET_ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Tobii.EyeX.Client.1.8.503\build\Tobii.EyeX.Client.targets" Condition="Exists('..\packages\Tobii.EyeX.Client.1.8.503\build\Tobii.EyeX.Client.targets')" />
