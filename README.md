@@ -1,2 +1,1 @@
-Windows forms программа для записи и обработки видео с отображением позиции взгляда. Используются api tobii eyeX.
-1.
+The program records video from the screen and draws the position of the eyes on each frame. Uses the api Tobi Eye tracking
